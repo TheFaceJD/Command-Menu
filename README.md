@@ -11,6 +11,9 @@
 
 *_It's perfect for complex commands, teleportations, issuing items, and much more — everything is at your fingertips._
 
+## Dependencies
+[Fabric API](https://modrinth.com/mod/fabric-api) (Required)
+
 ## RU:
 **Command Menu** — это удобный инструмент как для обычных игроков, так и для администраторов серверов, который позволяет сохранять часто используемые команды и выполнять их одним нажатием кнопки!
 
@@ -23,3 +26,6 @@
 Идеально подходит для сложных команд, телепортаций, выдачи предметов и многого другого — всё под рукой.
 
 *_Совместим с модами, расширяющими допустимый ввод команд в чате._
+
+## Зависимости
+[Fabric API](https://modrinth.com/mod/fabric-api) (Обязателен)
