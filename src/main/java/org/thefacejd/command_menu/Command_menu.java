@@ -18,10 +18,12 @@ public class Command_menu implements ClientModInitializer {
     public record MenuItem(String name, String icon, String command) {
     }
 
-    public static KeyMapping.Category MOD_CATEGORY = new KeyMapping.Category(Identifier.fromNamespaceAndPath("category", MOD_ID));
+    public static KeyMapping.Category MOD_CATEGORY = new KeyMapping.Category(
+            Identifier.fromNamespaceAndPath("category", MOD_ID));
 
     @Override
     public void onInitializeClient() {
+
         ConfigManager.load();
         LOGGER.info(MOD_ID + " initialized!");
         KeyInputHandler.register();

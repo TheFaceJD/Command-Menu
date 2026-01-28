@@ -35,10 +35,7 @@ public class KeyInputHandler {
                     client.setScreen(new CommandMenuScreen());
                 }
             }
-        });
-
-        ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (OPEN_MENU.consumeClick()) {
+            while (OPEN_SETTINGS_MENU.consumeClick()) {
                 if (client.screen == null) {
                     client.setScreen(new SettingsMenuScreen());
                 }

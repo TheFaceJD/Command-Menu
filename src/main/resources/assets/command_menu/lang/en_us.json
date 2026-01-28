@@ -1,4 +1,8 @@
 {
+  "key.category.category.command_menu": "Command menu",
+  "key.command_menu.open": "Open menu",
+  "key.command_menu.open_settings": "Open settings",
+
   "command_menu.screen.settings.title": "Command Menu — Settings",
   "command_menu.screen.deleteCommand.title": "Delete Command",
 

@@ -1,4 +1,8 @@
 {
+  "key.category.category.command_menu": "Command menu",
+  "key.command_menu.open": "Открыть меню",
+  "key.command_menu.open_settings": "Открыть настройки",
+
   "command_menu.screen.settings.title": "Command Menu — Настройки",
   "command_menu.screen.deleteCommand.title": "Удаление команды",
 
