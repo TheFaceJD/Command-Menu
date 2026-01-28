@@ -1,5 +1,4 @@
-[![Modrinth](https://img.shields.io/modrinth/dt/LemPa6PG?style=flat-square&label=Modrinth&labelColor=2318c05e
-)](https://modrinth.com/mod/command-menu)
+[![Modrinth](https://img.shields.io/modrinth/dt/LemPa6PG?style=flat-square&label=Modrinth&color=%2318c05e)](https://modrinth.com/mod/command-menu)
 
 ## EN:
 **Command Menu** is a convenient tool for both regular players and server administrators that allows you to save frequently used commands and execute them with just one button press!
