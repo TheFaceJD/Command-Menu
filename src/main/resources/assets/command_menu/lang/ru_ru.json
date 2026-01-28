@@ -11,7 +11,7 @@
   "command_menu.button.add": "Создать",
 
   "command_menu.field.name.label": "Название",
-  "command_menu.field.icon.label": "Иконка (название:путь)",
+  "command_menu.field.icon.label": "Иконка",
   "command_menu.field.command.label": "Команда",
   "command_menu.field.command.placeholder": "Укажите команду, например: gamemode creative",
 
