@@ -1,8 +1,6 @@
 package org.thefacejd.command_menu;
 
 import net.fabricmc.api.ClientModInitializer;
-import net.minecraft.client.KeyMapping;
-import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.thefacejd.command_menu.config.ConfigManager;
@@ -17,9 +15,6 @@ public class Command_menu implements ClientModInitializer {
 
     public record MenuItem(String name, String icon, String command) {
     }
-
-    public static KeyMapping.Category MOD_CATEGORY = new KeyMapping.Category(
-            Identifier.fromNamespaceAndPath("category", MOD_ID));
 
     @Override
     public void onInitializeClient() {

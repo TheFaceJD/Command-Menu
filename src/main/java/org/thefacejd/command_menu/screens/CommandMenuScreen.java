@@ -5,20 +5,15 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.renderer.RenderPipelines;
-import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.thefacejd.command_menu.Command_menu;
 import org.thefacejd.command_menu.config.ConfigManager;
-
-import java.util.Optional;
 
 import static org.thefacejd.command_menu.handlers.KeyInputHandler.OPEN_MENU;
 
@@ -39,11 +34,11 @@ public class CommandMenuScreen extends Screen {
 
     private static final int FIRST_BUTTON_Y = 26;
 
-    private static final Identifier PANEL_TEXTURE =
-            Identifier.fromNamespaceAndPath(Command_menu.MOD_ID, "textures/gui/command_menu_panel.png");
+    private static final ResourceLocation PANEL_TEXTURE =
+            ResourceLocation.tryBuild(Command_menu.MOD_ID, "textures/gui/command_menu_panel.png");
 
-    private static final Identifier GEAR_TEXTURE =
-            Identifier.fromNamespaceAndPath(Command_menu.MOD_ID, "textures/gui/command_menu_gear_icon.png");
+    private static final ResourceLocation GEAR_TEXTURE =
+            ResourceLocation.tryBuild(Command_menu.MOD_ID, "textures/gui/command_menu_gear_icon.png");
 
     private int currentPage = 0;
 
@@ -75,7 +70,10 @@ public class CommandMenuScreen extends Screen {
 
         addRenderableWidget(
                 Button.builder(Component.empty(),
-                                b -> minecraft.setScreen(new SettingsMenuScreen()))
+                                b -> {
+                                    assert minecraft != null;
+                                    minecraft.setScreen(new SettingsMenuScreen());
+                                })
                         .bounds(
                                 settingsBtnX,
                                 settingsBtnY,
@@ -122,6 +120,7 @@ public class CommandMenuScreen extends Screen {
                 addRenderableWidget(
                         Button.builder(Component.empty(),
                                         b -> {
+                                            assert minecraft != null;
                                             if (minecraft.player != null) {
                                                 minecraft.player.connection.sendCommand(item.command());
                                             }
@@ -145,7 +144,7 @@ public class CommandMenuScreen extends Screen {
         int panelX = centerX - PANEL_WIDTH / 2;
         int panelY = centerY - PANEL_HEIGHT / 2;
 
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, PANEL_TEXTURE, panelX, panelY, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+        guiGraphics.blit(PANEL_TEXTURE, panelX, panelY, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
 
         int titleWidth = this.font.width(this.title);
         int titleX = panelX + (PANEL_WIDTH - titleWidth) / 2;
@@ -175,20 +174,20 @@ public class CommandMenuScreen extends Screen {
 
             for (int col = 0; col < rowCount; col++) {
                 int index = startIndex + col;
-                String idString = ConfigManager.config.menuItems.get(index).icon();
+                Command_menu.MenuItem menuItem = ConfigManager.config.menuItems.get(index);
+                if (menuItem.icon().isEmpty()) continue;
+                String idString = menuItem.icon();
                 String[] parts = idString.split(":", 2);
                 if (parts.length != 2) continue;
-                Identifier itemId;
+                ResourceLocation itemId;
 
                 try {
-                    itemId = Identifier.fromNamespaceAndPath(parts[0], parts[1]);
+                    itemId = ResourceLocation.tryBuild(parts[0], parts[1]);
                 } catch (Exception e) {
                     continue;
                 }
 
-                Optional<Holder.Reference<@NotNull Item>> holder = BuiltInRegistries.ITEM.get(itemId);
-                if (holder.isEmpty()) continue;
-                Item item = holder.get().value();
+                Item item = BuiltInRegistries.ITEM.get(itemId);
                 if (item == Items.AIR) continue;
                 ItemStack stack = new ItemStack(item);
 
@@ -204,8 +203,7 @@ public class CommandMenuScreen extends Screen {
         int gearX = settingsBtnX + (SETTINGS_BUTTON_SIZE - SETTINGS_ICON_SIZE) / 2;
         int gearY = settingsBtnY + (SETTINGS_BUTTON_SIZE - SETTINGS_ICON_SIZE) / 2 - 2;
 
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, GEAR_TEXTURE,
-                gearX, gearY, 0, 0,
+        guiGraphics.blit(GEAR_TEXTURE, gearX, gearY, 0, 0,
                 SETTINGS_ICON_SIZE, SETTINGS_ICON_SIZE, SETTINGS_ICON_SIZE, SETTINGS_ICON_SIZE);
     }
 
@@ -215,22 +213,17 @@ public class CommandMenuScreen extends Screen {
     }
 
     @Override
-    public boolean shouldCloseOnEsc() {
-        return true;
-    }
-
-    @Override
     public boolean isPauseScreen() {
         return false;
     }
 
     @Override
-    public boolean keyPressed(@NotNull KeyEvent keyEvent) {
-        if (OPEN_MENU.matches(keyEvent)) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (OPEN_MENU.matches(keyCode, scanCode)) {
             this.onClose();
             return true;
         }
-        return super.keyPressed(keyEvent);
+        return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     private void addPageButtons(int panelX, int panelY) {

@@ -15,14 +15,14 @@ public class KeyInputHandler {
             "key." + Command_menu.MOD_ID + ".open",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_G,
-            Command_menu.MOD_CATEGORY
+            "key.category.category.command_menu"
     );
 
     public static final KeyMapping OPEN_SETTINGS_MENU = new KeyMapping(
             "key." + Command_menu.MOD_ID + ".open_settings",
             InputConstants.Type.KEYSYM,
             GLFW.GLFW_KEY_BACKSLASH,
-            Command_menu.MOD_CATEGORY
+            "key.category.category.command_menu"
     );
 
     public static void register() {
