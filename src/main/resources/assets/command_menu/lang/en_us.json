@@ -1,0 +1,21 @@
+{
+  "command_menu.screen.settings.title": "Command Menu — Settings",
+  "command_menu.screen.deleteCommand.title": "Delete Command",
+
+  "command_menu.button.save": "Save",
+  "command_menu.button.back": "Back",
+  "command_menu.button.add": "Create",
+
+  "command_menu.field.name.label": "Name",
+  "command_menu.field.icon.label": "Icon (name:path)",
+  "command_menu.field.command.label": "Command",
+  "command_menu.field.command.placeholder": "Specify the command, for example: gamemode creative",
+
+  "command_menu.tooltip.settings": "Settings",
+
+  "command_menu.error.commandNotIndicated": "Command was not specified.",
+  "command_menu.error.commandLimit": "The command limit has been reached — %1$s",
+
+  "command_menu.screen.deleteCommand.label.withoutCommand": "Are you sure you want to delete the command \"%1$s\"?",
+  "command_menu.screen.deleteCommand.label": "Are you sure you want to delete the command \"%1$s\", which contains the following call: %2$s?"
+}

@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "command_menu",
+  "version": "${version}",
+  "name": "Command Menu",
+  "description": "Admin Interaction Enhancement Mod.",
+  "authors": ["https://github.com/TheFaceJD"],
+  "contact": {},
+  "license": "MIT",
+  "icon": "assets/command_menu/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "org.thefacejd.command_menu.Command_menu"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric-api": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}

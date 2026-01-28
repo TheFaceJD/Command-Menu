@@ -1,0 +1,21 @@
+{
+  "command_menu.screen.settings.title": "Command Menu — Настройки",
+  "command_menu.screen.deleteCommand.title": "Удаление команды",
+
+  "command_menu.button.save": "Сохранить",
+  "command_menu.button.back": "Назад",
+  "command_menu.button.add": "Создать",
+
+  "command_menu.field.name.label": "Название",
+  "command_menu.field.icon.label": "Иконка (название:путь)",
+  "command_menu.field.command.label": "Команда",
+  "command_menu.field.command.placeholder": "Укажите команду, например: gamemode creative",
+
+  "command_menu.tooltip.settings": "Настройки",
+
+  "command_menu.error.commandNotIndicated": "Команда не указана.",
+  "command_menu.error.commandLimit": "Достигнут лимит команд - %1$s",
+
+  "command_menu.screen.deleteCommand.label.withoutCommand": "Вы уверены, что хотите удалить команду \"%1$s\"?",
+  "command_menu.screen.deleteCommand.label": "Вы уверены, что хотите удалить команду \"%1$s\", которая содержит в себе следующий вызов:\n%2$s?"
+}
