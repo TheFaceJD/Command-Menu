@@ -46,10 +46,6 @@ public class SettingsMenuScreen extends Screen {
     private int panelHeight;
     private int panelX;
     private int panelY;
-    private int innerX;
-    private int innerY;
-    private int innerW;
-    private int innerH;
 
     private int nameX;
     private int iconX;
@@ -93,10 +89,10 @@ public class SettingsMenuScreen extends Screen {
         panelX = (width - panelWidth) / 2;
         panelY = (height - panelHeight) / 2;
 
-        innerX = panelX + TEX_PAD_X;
-        innerY = panelY + TEX_PAD_Y;
-        innerW = panelWidth - TEX_PAD_X * 2;
-        innerH = panelHeight - TEX_PAD_Y * 2;
+        int innerX = panelX + TEX_PAD_X;
+        int innerY = panelY + TEX_PAD_Y;
+        int innerW = panelWidth - TEX_PAD_X * 2;
+        int innerH = panelHeight - TEX_PAD_Y * 2;
 
         int btnY = innerY + innerH - FOOTER_HEIGHT + 8;
         int pageButtonsY = innerY + innerH - FOOTER_HEIGHT - PAGE_BUTTON_SIZE - 6;
