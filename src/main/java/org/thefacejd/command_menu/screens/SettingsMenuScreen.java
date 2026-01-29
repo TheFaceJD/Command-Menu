@@ -126,8 +126,17 @@ public class SettingsMenuScreen extends Screen {
 
         pageSize = Math.max(1, availableHeight / (ROW_HEIGHT + ROW_GAP));
         pageSize = Math.min(pageSize, BASE_PAGE_SIZE);
-        maxPages = (Command_menu.MAX_COMMANDS + pageSize - 1) / pageSize;
+        int realTotal = ConfigManager.config.menuItems.size();
+        int realPages = Math.max(1, (realTotal + pageSize - 1) / pageSize);
+        maxPages = realPages;
         currentPage = Math.min(currentPage, maxPages - 1);
+
+        if (currentPage >= realPages) {
+            currentPage = realPages - 1;
+        }
+        if (currentPage < 0) {
+            currentPage = 0;
+        }
 
         int totalAll = Math.min(ConfigManager.config.menuItems.size(), maxPages * pageSize);
         int pageStart = currentPage * pageSize;
