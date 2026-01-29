@@ -256,4 +256,9 @@ public class CommandMenuScreen extends Screen {
             addRenderableWidget(btn);
         }
     }
+
+    @Override
+    public void renderBlurredBackground(float f) {
+
+    }
 }
