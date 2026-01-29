@@ -4,8 +4,12 @@
   "version": "${version}",
   "name": "Command Menu",
   "description": "Admin Interaction Enhancement Mod.",
-  "authors": ["https://github.com/TheFaceJD"],
-  "contact": {},
+  "authors": [
+    "TheFaceJD"
+  ],
+  "contact": {
+    "repo": "https://github.com/TheFaceJD/Command-Menu/"
+  },
   "license": "MIT",
   "icon": "assets/command_menu/icon.png",
   "environment": "client",

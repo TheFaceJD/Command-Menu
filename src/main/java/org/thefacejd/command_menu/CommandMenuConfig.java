@@ -1,5 +1,6 @@
 package org.thefacejd.command_menu;
 
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -42,8 +43,8 @@ public class CommandMenuConfig {
                 if (itemId == null) {
                     validIcon = "minecraft:stone";
                 } else {
-                    Optional<Item> registryItem = Optional.of(BuiltInRegistries.ITEM.get(itemId));
-                    if (registryItem.get() != Items.AIR) {
+                    Optional<Holder.Reference<Item>> registryItem = BuiltInRegistries.ITEM.get(itemId);
+                    if (registryItem.isPresent() && registryItem.get().value() != Items.AIR) {
                         validIcon = itemId.toString();
                         Command_menu.LOGGER.info(registryItem.toString());
                     } else {

@@ -7,6 +7,8 @@ import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.components.MultiLineEditBox;
 import net.minecraft.client.gui.screens.ConfirmScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -19,6 +21,7 @@ import org.thefacejd.command_menu.config.ConfigManager;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 public class SettingsMenuScreen extends Screen {
@@ -46,10 +49,6 @@ public class SettingsMenuScreen extends Screen {
     private int panelHeight;
     private int panelX;
     private int panelY;
-    private int innerX;
-    private int innerY;
-    private int innerW;
-    private int innerH;
 
     private int nameX;
     private int iconX;
@@ -93,10 +92,10 @@ public class SettingsMenuScreen extends Screen {
         panelX = (width - panelWidth) / 2;
         panelY = (height - panelHeight) / 2;
 
-        innerX = panelX + TEX_PAD_X;
-        innerY = panelY + TEX_PAD_Y;
-        innerW = panelWidth - TEX_PAD_X * 2;
-        innerH = panelHeight - TEX_PAD_Y * 2;
+        int innerX = panelX + TEX_PAD_X;
+        int innerY = panelY + TEX_PAD_Y;
+        int innerW = panelWidth - TEX_PAD_X * 2;
+        int innerH = panelHeight - TEX_PAD_Y * 2;
 
         int btnY = innerY + innerH - FOOTER_HEIGHT + 8;
         int pageButtonsY = innerY + innerH - FOOTER_HEIGHT - PAGE_BUTTON_SIZE - 6;
@@ -126,8 +125,17 @@ public class SettingsMenuScreen extends Screen {
 
         pageSize = Math.max(1, availableHeight / (ROW_HEIGHT + ROW_GAP));
         pageSize = Math.min(pageSize, BASE_PAGE_SIZE);
-        maxPages = (Command_menu.MAX_COMMANDS + pageSize - 1) / pageSize;
+        int realTotal = ConfigManager.config.menuItems.size();
+        int realPages = Math.max(1, (realTotal + pageSize - 1) / pageSize);
+        maxPages = realPages;
         currentPage = Math.min(currentPage, maxPages - 1);
+
+        if (currentPage >= realPages) {
+            currentPage = realPages - 1;
+        }
+        if (currentPage < 0) {
+            currentPage = 0;
+        }
 
         int totalAll = Math.min(ConfigManager.config.menuItems.size(), maxPages * pageSize);
         int pageStart = currentPage * pageSize;
@@ -208,8 +216,9 @@ public class SettingsMenuScreen extends Screen {
                     return;
                 }
 
-                Item itemFromRegistry = BuiltInRegistries.ITEM.get(itemId);
-                if (itemFromRegistry != Items.AIR) invalid = false;
+                assert itemId != null;
+                Optional<Holder.Reference<Item>> itemFromRegistry = BuiltInRegistries.ITEM.get(itemId);
+                if (itemFromRegistry.isPresent() && itemFromRegistry.get().value() != Items.AIR) invalid = false;
 
                 iconField.setTextColor(invalid ? 0xFFFF5555 : 0xFFFFFFFF);
             });
@@ -229,13 +238,22 @@ public class SettingsMenuScreen extends Screen {
     }
 
     @Override
+    public boolean mouseDragged(double d, double e, int i, double f, double g) {
+        try {
+            return super.mouseDragged(d, e, i, f, g);
+        } catch (ArithmeticException er) {
+            return true;
+        }
+    }
+
+    @Override
     public void render(
             @NotNull GuiGraphics guiGraphics,
             int mouseX,
             int mouseY,
             float delta
     ) {
-        guiGraphics.blit(PANEL_TEXTURE,
+        guiGraphics.blit(RenderType::guiTextured, PANEL_TEXTURE,
                 panelX, panelY, 0, 0,
                 panelWidth, panelHeight, panelWidth, panelHeight
         );
@@ -258,15 +276,6 @@ public class SettingsMenuScreen extends Screen {
         super.render(guiGraphics, mouseX, mouseY, delta);
     }
 
-    @Override
-    public boolean mouseDragged(double d, double e, int i, double f, double g) {
-        try {
-            return super.mouseDragged(d, e, i, f, g);
-        } catch (ArithmeticException er) {
-            return true;
-        }
-    }
-
     private void moveCommand(int localIndex, int delta) {
         int global = currentPage * pageSize + localIndex;
         int target = global + delta;
@@ -276,11 +285,16 @@ public class SettingsMenuScreen extends Screen {
         for (int i = 0; i < rows.size(); i++) {
             int idxGlobal = currentPage * pageSize + i;
             RowWidgets rw = rows.get(i);
-            ConfigManager.config.menuItems.set(idxGlobal, new Command_menu.MenuItem(
-                    rw.nameField.getValue(),
-                    (validateIcon(rw.iconField.getValue(), idxGlobal) == null) ? rw.iconField.getValue() : ConfigManager.config.menuItems.get(idxGlobal).icon(),
-                    rw.commandField.getValue()
-            ));
+
+            String validatedIcon = validateIcon(rw.iconField.getValue(), idxGlobal);
+            String finalIcon = (validatedIcon != null) ? validatedIcon : ConfigManager.config.menuItems.get(idxGlobal).icon();
+            ConfigManager.config.menuItems.set(idxGlobal,
+                    new Command_menu.MenuItem(
+                            rw.nameField.getValue(),
+                            finalIcon,
+                            rw.commandField.getValue()
+                    )
+            );
         }
 
         Collections.swap(ConfigManager.config.menuItems, global, target);
@@ -333,9 +347,10 @@ public class SettingsMenuScreen extends Screen {
 
         try {
             ResourceLocation id = ResourceLocation.tryBuild(parts[0], parts[1]);
-            Item item = BuiltInRegistries.ITEM.get(id);
+            assert id != null;
+            Optional<Holder.Reference<Item>> item = BuiltInRegistries.ITEM.get(id);
 
-            if (item != Items.AIR) return fullId;
+            if (item.isPresent() && item.get().value() != Items.AIR) return fullId;
 
         } catch (Exception ignored) {
         }
@@ -440,5 +455,9 @@ public class SettingsMenuScreen extends Screen {
 
         minecraft.setScreen(this);
         init();
+    }
+
+    @Override
+    protected void renderBlurredBackground() {
     }
 }

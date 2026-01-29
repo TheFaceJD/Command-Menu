@@ -5,6 +5,8 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderType;
+import net.minecraft.core.Holder;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -14,6 +16,8 @@ import net.minecraft.world.item.Items;
 import org.jetbrains.annotations.NotNull;
 import org.thefacejd.command_menu.Command_menu;
 import org.thefacejd.command_menu.config.ConfigManager;
+
+import java.util.Optional;
 
 import static org.thefacejd.command_menu.handlers.KeyInputHandler.OPEN_MENU;
 
@@ -144,7 +148,7 @@ public class CommandMenuScreen extends Screen {
         int panelX = centerX - PANEL_WIDTH / 2;
         int panelY = centerY - PANEL_HEIGHT / 2;
 
-        guiGraphics.blit(PANEL_TEXTURE, panelX, panelY, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
+        guiGraphics.blit(RenderType::guiTextured, PANEL_TEXTURE, panelX, panelY, 0, 0, PANEL_WIDTH, PANEL_HEIGHT, PANEL_WIDTH, PANEL_HEIGHT);
 
         int titleWidth = this.font.width(this.title);
         int titleX = panelX + (PANEL_WIDTH - titleWidth) / 2;
@@ -187,14 +191,15 @@ public class CommandMenuScreen extends Screen {
                     continue;
                 }
 
-                Item item = BuiltInRegistries.ITEM.get(itemId);
-                if (item == Items.AIR) continue;
-                ItemStack stack = new ItemStack(item);
+                Optional<Holder.Reference<Item>> item = BuiltInRegistries.ITEM.get(itemId);
+                if (item.isPresent() && item.get().value() != Items.AIR) {
+                    ItemStack stack = new ItemStack(item.get());
 
-                int buttonX = rowStartX + col * (BUTTON_SIZE + BUTTON_SPACING);
-                int iconX = buttonX + (BUTTON_SIZE - BUTTON_ICON_SIZE) / 2;
-                int iconY = buttonY + (BUTTON_SIZE - BUTTON_ICON_SIZE) / 2;
-                guiGraphics.renderItem(stack, iconX, iconY);
+                    int buttonX = rowStartX + col * (BUTTON_SIZE + BUTTON_SPACING);
+                    int iconX = buttonX + (BUTTON_SIZE - BUTTON_ICON_SIZE) / 2;
+                    int iconY = buttonY + (BUTTON_SIZE - BUTTON_ICON_SIZE) / 2;
+                    guiGraphics.renderItem(stack, iconX, iconY);
+                }
             }
         }
 
@@ -203,7 +208,7 @@ public class CommandMenuScreen extends Screen {
         int gearX = settingsBtnX + (SETTINGS_BUTTON_SIZE - SETTINGS_ICON_SIZE) / 2;
         int gearY = settingsBtnY + (SETTINGS_BUTTON_SIZE - SETTINGS_ICON_SIZE) / 2 - 2;
 
-        guiGraphics.blit(GEAR_TEXTURE, gearX, gearY, 0, 0,
+        guiGraphics.blit(RenderType::guiTextured, GEAR_TEXTURE, gearX, gearY, 0, 0,
                 SETTINGS_ICON_SIZE, SETTINGS_ICON_SIZE, SETTINGS_ICON_SIZE, SETTINGS_ICON_SIZE);
     }
 
@@ -255,5 +260,9 @@ public class CommandMenuScreen extends Screen {
             }
             addRenderableWidget(btn);
         }
+    }
+
+    @Override
+    protected void renderBlurredBackground() {
     }
 }
