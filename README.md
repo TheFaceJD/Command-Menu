@@ -8,7 +8,9 @@
 - View and edit saved commands right in the game;
 - Execute a command instantly by simply clicking the corresponding button in the menu;
 
-*_It's perfect for complex commands, teleportations, issuing items, and much more — everything is at your fingertips._
+It's perfect for complex commands, teleportations, issuing items, and much more — everything is at your fingertips.
+
+*_Compatible with mods that extend the allowed input of commands in the chat._
 
 ## Dependencies
 [Fabric API](https://modrinth.com/mod/fabric-api) (Required)
